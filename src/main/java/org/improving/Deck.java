@@ -31,7 +31,7 @@ public class Deck {
     }
     public Card draw(){
     var random = new Random().nextInt(drawPile.size());
-    var card = drawPile.get(random-1);
+    var card = drawPile.get(random == 0 ? 0 : random-1);
     drawPile.remove(card);
     return card;
     }

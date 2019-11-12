@@ -30,7 +30,7 @@ public class UnoTest {
 //                new Card(Color.Green, Faces.Zero)
 //  };
         //Act
-        List<Card> firstHand = hand.firstHand();
+        List<Card> firstHand = hand.getHand();
 
         //Assert
         assertTrue(firstHand.size() == 7);

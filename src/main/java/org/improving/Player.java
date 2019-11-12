@@ -23,7 +23,15 @@ public class Player {
         this.hand = hand;
     }
 
-    public void takeTurn() {
+    public void takeTurn(Deck deck) {
+        for (var card:hand.getHand()) {
+            if(isPlayable(deck, card)){
+                hand.getHand().remove(card);
+                deck.getDiscardPile().add(card);
+                return;
+            }
+        }
+        hand.getHand().add(deck.draw());
 
     }
 }

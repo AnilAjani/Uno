@@ -8,18 +8,13 @@ public class Hand {
     List<Card> hand = new ArrayList<>();
 
     public Hand(Deck deck) {
-        this.deck = deck;
-    }
-
-    public List<Card> getHand() {
-        return hand;
-    }
-
-    public List<Card> firstHand() {
         deck.getDrawPile();
         for (int i = 0; i < 7; i++) {
             hand.add(deck.draw());
         }
+    }
+
+    public List<Card> getHand() {
         return hand;
     }
 
