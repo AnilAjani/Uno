@@ -3,6 +3,7 @@ package org.improving;
 public class Card {
   private Color color;
   private Faces faces;
+  boolean isChecked = true;
 
     public Card(Color color, Faces faces) {
         this.color = color;

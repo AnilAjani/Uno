@@ -1,18 +1,17 @@
 package org.improving;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Game {
 
-    private Deck deck;
+    private Deck deck = new Deck();
     LinkedList<Player> players;
-    int currentPlayer = 0;
+    int currentTurn = 0;
     int turnEngine = 0;
     int turnDirection = 1;
-    int playerNumber;
+
 
     public static void main(String[] args) {
         Game game = new Game();
@@ -41,17 +40,34 @@ public class Game {
         deck.getDiscardPile().add(topCard);
         System.out.println(topCard);
         int turns = 0;
-        while(true) {
-            for(var player: players) {
-                player.takeTurn(deck, this);
-                turns++;
-                if (player.getHand().size() == 0) {
-                    System.out.println("Player " + player.getName() + " Wins ");
-                    return;
-                }
+        boolean gameProgress = true;
+        int playerNumber;
+
+        while(gameProgress) {
+            playerNumber = getPlayerNumber();
+            var actualPlayer = players.get(playerNumber);
+            actualPlayer.takeTurn(deck, this);
+            System.out.println(actualPlayer.getName() + " Played " + actualPlayer.getHand());
+            turns++;
+            if(evaluateSpecialCard(topCard)) {
+                executeSpecial(this, topCard);
             }
+            if (actualPlayer.getHand().size() == 0) {
+                System.out.println(actualPlayer.getName() + " Wins " + turns);
+                return;
+            }
+            currentTurn = currentTurn + turnDirection;
+
         }
     }
+
+    private int getPlayerNumber() {
+        if(currentTurn < 0){
+            currentTurn = currentTurn + players.size();
+        }
+        return currentTurn % players.size();
+    }
+
 
     public boolean isPlayable(Card card) {
         return deck.getDiscardTopCard().getFace() == card.getFace() ||
@@ -74,16 +90,49 @@ public class Game {
 
     public void playCard(Card card) {
         System.out.println("Played card : " + card.toString());
-        if()
         if(deck.getDiscardTopCard().getFace().getValue() == 50){
             card.setColor(Color.Red);
         }
         deck.getDiscardPile().add(card);
     }
-    public void drawTwo(Player player, Card card){
-        if(card.getFace() == Faces.DrawTwo){
-            player.getHand().add(this.deck.draw());
-            player.getHand().add(this.deck.draw());
+
+    public boolean evaluateSpecialCard(Card card) {
+        if (card.getFace().equals(Faces.DrawTwo)
+                || card.getFace().equals(Faces.WildDrawFour)
+                || card.getFace().equals(Faces.Skip)
+                || card.getFace().equals(Faces.Reverse)) {
+            return true;
+        } else return false;
+    }
+
+    public void executeSpecial(Game game, Card card){
+
+        int nextPlayer = (currentTurn + turnDirection) % players.size();
+        int activePlayerNumber = currentTurn % players.size();
+
+        if(card.getFace() == Faces.DrawTwo && card.isChecked) {
+            players.get(nextPlayer).draw(game);
+            players.get(nextPlayer).draw(game);
+            card.isChecked = false;
+            currentTurn = currentTurn + turnDirection;
+        }
+        if(card.getFace() == Faces.WildDrawFour && card.isChecked) {
+            players.get(nextPlayer).draw(game);
+            players.get(nextPlayer).draw(game);
+            players.get(nextPlayer).draw(game);
+            players.get(nextPlayer).draw(game);
+            card.isChecked = false;
+            currentTurn = currentTurn + turnDirection;
+        }
+
+        if(card.getFace() == Faces.Reverse && card.isChecked) {
+            turnDirection = turnDirection * -1;
+            card.isChecked = false;
+        }
+
+        if(card.getFace() == Faces.Skip && card.isChecked) {
+            turnDirection = turnDirection + 1;
+            card.isChecked = false;
         }
     }
 }

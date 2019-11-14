@@ -1,12 +1,13 @@
 package org.improving;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Player {
     LinkedList<Card> hand;
     private String name;
+    private Game game;
 
     public Player(String name, Deck deck) {
         this.hand = new LinkedList<>();
@@ -26,8 +27,8 @@ public class Player {
     }
 
     public void takeTurn(Deck deck, Game game) {
-        for (var card:hand) {
-            if(game.isPlayable(card)){
+        for (var card : hand) {
+            if (game.isPlayable(card)) {
                 hand.remove(card);
                 game.playCard(card);
                 return;
@@ -38,6 +39,21 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public void draw(Game game) {
+        this.game = game;
+        // TODO: replenish deck from discard pile.
+        if (game.getDeck().getDrawPile().isEmpty()) {
+            // getDiscardPile()-getDiscardTopCard();
+            var tempCard = game.getDeck().getDiscardPile().getLast();
+            game.getDeck().getDiscardPile().remove(tempCard);
+            game.getDeck().getDrawPile().addAll(game.getDeck().getDiscardPile());
+            game.getDeck().getDiscardPile().clear();
+            game.getDeck().getDiscardPile().add(tempCard);
+            Collections.shuffle(game.getDeck().getDrawPile());
+
+        }
     }
 }
 
