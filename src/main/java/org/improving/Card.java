@@ -11,7 +11,7 @@ public class Card {
 
     @Override
     public String toString() {
-        return "" + color.toString() + " " + faces.toString();
+        return "" + (color == null ?  "" : color.toString()) + " " + faces.toString();
     }
 
     public Color getColor() {

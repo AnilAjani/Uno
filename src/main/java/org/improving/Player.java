@@ -1,38 +1,43 @@
 package org.improving;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Player {
-    private Hand hand;
+    LinkedList<Card> hand;
+    private String name;
 
-    public Player(Hand hand) {
-        this.hand = hand;
+    public Player(String name, Deck deck) {
+        this.hand = new LinkedList<>();
+        this.name = name;
+        dealHand(deck);
     }
 
-    public boolean isPlayable(Deck deck, Card card) {
-        return deck.getDiscardTopCard().getFace() == card.getFace() ||
-                deck.getDiscardTopCard().getColor() == card.getColor() ||
-                card.getFace().getValue() == 50;
+    public void dealHand(Deck deck) {
+        deck.getDrawPile();
+        for (int i = 0; i < 7; i++) {
+            hand.add(deck.draw());
+        }
     }
 
-    public Hand getHand() {
+    public List<Card> getHand() {
         return hand;
     }
 
-    public void setHand(Hand hand) {
-        this.hand = hand;
-    }
-
-    public void takeTurn(Deck deck) {
-        for (var card:hand.getHand()) {
-            if(isPlayable(deck, card)){
-                hand.getHand().remove(card);
-                deck.getDiscardPile().add(card);
+    public void takeTurn(Deck deck, Game game) {
+        for (var card:hand) {
+            if(game.isPlayable(card)){
+                hand.remove(card);
+                game.playCard(card);
                 return;
             }
         }
-        hand.getHand().add(deck.draw());
+        hand.add(game.getDeck().draw());
+    }
 
+    public String getName() {
+        return name;
     }
 }
 
