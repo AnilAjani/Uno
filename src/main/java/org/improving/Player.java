@@ -9,6 +9,7 @@ public class Player {
     private String name;
     private Game game;
 
+
     public Player(String name, Deck deck) {
         this.hand = new LinkedList<>();
         this.name = name;
@@ -31,10 +32,12 @@ public class Player {
             if (game.isPlayable(card)) {
                 hand.remove(card);
                 game.playCard(card);
+                System.out.println(deck.getDiscardPile().getLast() + " was played ");
                 return;
             }
         }
         hand.add(game.getDeck().draw());
+        System.out.println("Drew card");
     }
 
     public String getName() {
