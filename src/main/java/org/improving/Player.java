@@ -1,6 +1,5 @@
 package org.improving;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,17 +25,18 @@ public class Player implements iPlayer {
         return hand;
     }
     @Override
-    public void takeTurn(Game game) {
+    public Card takeTurn(Game game) {
         for (var card : hand) {
             if (game.isPlayable(card)) {
                 hand.remove(card);
                 game.playCard(card);
                 System.out.println(card + " was played ");
-                return;
+                return card;
             }
         }
         hand.add(game.getDeck().draw());
         System.out.println("Drew card");
+        return null;
     }
 
     public String getName() {

@@ -137,5 +137,9 @@ class PlayerTest {
         //Assert
         assertEquals(3, result);
     }
+    @Test
+    void takeTurn_Should_Let_DrawnCard_Play_If_isPlayable(){
+
+    }
 
 }

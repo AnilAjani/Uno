@@ -10,7 +10,6 @@ public class Game {
     private Deck deck = new Deck();
     LinkedList<Player> players;
     int currentTurn = 0;
-    int turnEngine = 0;
     int turnDirection = 1;
 
 
@@ -29,51 +28,54 @@ public class Game {
                 new Player("Player 3 ", deck),
                 new Player("Player 4 ", deck),
                 new Player("Player 5 ", deck)
-
         ));
     }
 
-    public void play(){
-        System.out.println("New Game with " + players.size() + " players ");
-        System.out.println("DRAW PILE SIZE = " + deck.getDrawPile().size());
-        for(var player:players){
-            System.out.println(player.getName() + " has " + player.getHand().size());
-        }
-        var topCard = deck.draw();
-        playCard(topCard);
-        System.out.println(topCard);
+    public void play() {
+        printGameStart();
+
+        // Draw the first card.
+        playCard(draw());
+        System.out.println(deck.getDiscardPile().getLast());
+
         int turns = 0;
-        boolean gameProgress = true;
         int playerNumber;
         // start game
-        while(gameProgress) {
+        while (true) {
 
             // get player index make it the "current player"
             playerNumber = getPlayerNumber();
             var actualPlayer = players.get(playerNumber);
-            var newDrawPile = deck.getDrawPile();
 
             // "current player" takes turn if cards in hand isPlayable based on color, face, wild or else draws card
             System.out.println(actualPlayer.getName() + " Has " + actualPlayer.getHand());
-            actualPlayer.takeTurn(this);
+            var playedCard = actualPlayer.takeTurn(this);
+            // what if it is a draw multiple or skip or reverse?
+            if (playedCard != null) executeSpecial();
             turns++;
 
-            // what if it is a draw multiple or skip or reverse?
-            // evaluate if true and executeSpecial
-                executeSpecial(this, topCard);
-            if (actualPlayer.getHand().size() == 0) {
+            if (actualPlayer.handSize() == 0) {
                 System.out.println(actualPlayer.getName() + " Wins " + turns);
                 return;
             }
-            currentTurn = currentTurn + turnDirection;
+            nextPlayer();
         }
     }
 
-    private int getPlayerNumber() {
-        if(currentTurn < 0){
-            currentTurn = currentTurn + players.size();
+    private void printGameStart() {
+        System.out.println("New Game with " + players.size() + " players ");
+        System.out.println("DRAW PILE SIZE = " + deck.getDrawPile().size());
+        for (var player : players) {
+            System.out.println(player.getName() + " has " + player.handSize());
         }
-        return currentTurn % players.size();
+    }
+
+    private void nextPlayer() {
+        currentTurn = currentTurn + turnDirection;
+    }
+
+    private int getPlayerNumber() {
+        return Math.abs(currentTurn % players.size());
     }
 
 
@@ -89,12 +91,11 @@ public class Game {
 
     public List<Player> getPlayers() {
         return players;
-
     }
 
     public void playCard(Card card) {
-        //System.out.println("Played card : " + card.toString());
-        if(card.getColor() == null) card.setColor(Color.values()[new Random().nextInt(4)]);
+        // If color is null, set the color.
+        if (card.getColor() == null) card.setColor(Color.values()[new Random().nextInt(4)]);
         deck.getDiscardPile().add(card);
     }
 
@@ -102,38 +103,31 @@ public class Game {
     //if true proceed to executeSpecial
 
     // next player will have to deal with the special card
-    public void executeSpecial(Game game, Card card){
+    public void executeSpecial() {
 
         int nextPlayer = Math.abs((currentTurn + turnDirection) % players.size());
-        int activePlayerNumber = currentTurn % players.size();
 
-        if(deck.getDiscardPile().getLast().getFace() == Faces.DrawTwo) {
+        if (deck.getDiscardPile().getLast().getFace() == Faces.DrawTwo) {
             System.out.println("---- " + players.get(nextPlayer).getName() + " DRAW TWO ----");
-            players.get(nextPlayer).getHand().add(deck.draw());
-            players.get(nextPlayer).getHand().add(deck.draw());
-            currentTurn = currentTurn + turnDirection;
-        }
-        else if(deck.getDiscardPile().getLast().getFace() == Faces.WildDrawFour) {
+            players.get(nextPlayer).getHand().add(draw());
+            players.get(nextPlayer).getHand().add(draw());
+            nextPlayer();
+        } else if (deck.getDiscardPile().getLast().getFace() == Faces.WildDrawFour) {
             System.out.println("---- " + players.get(nextPlayer).getName() + " DRAW FOUR ----");
-            players.get(nextPlayer).getHand().add(deck.draw());
-            players.get(nextPlayer).getHand().add(deck.draw());
-            players.get(nextPlayer).getHand().add(deck.draw());
-            players.get(nextPlayer).getHand().add(deck.draw());
-
-
-            currentTurn = currentTurn + turnDirection;
-        }
-
-        else if(deck.getDiscardPile().getLast().getFace() == Faces.Reverse) {
+            players.get(nextPlayer).getHand().add(draw());
+            players.get(nextPlayer).getHand().add(draw());
+            players.get(nextPlayer).getHand().add(draw());
+            players.get(nextPlayer).getHand().add(draw());
+            nextPlayer();
+        } else if (deck.getDiscardPile().getLast().getFace() == Faces.Reverse) {
             System.out.println("----REVERSE----");
             turnDirection = turnDirection * -1;
-        }
-
-        else if(deck.getDiscardPile().getLast().getFace() == Faces.Skip) {
+        } else if (deck.getDiscardPile().getLast().getFace() == Faces.Skip) {
             System.out.println("----SKIP----" + players.get(nextPlayer).getName());
-            currentTurn = currentTurn + turnDirection;
+            nextPlayer();
         }
     }
+
     public Card draw() {
         return deck.draw();
     }
