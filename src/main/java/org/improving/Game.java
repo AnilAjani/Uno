@@ -55,7 +55,7 @@ public class Game {
 
             // "current player" takes turn if cards in hand isPlayable based on color, face, wild or else draws card
             System.out.println(actualPlayer.getName() + " Has " + actualPlayer.getHand());
-            actualPlayer.takeTurn(deck, this);
+            actualPlayer.takeTurn(this);
             turns++;
 
             // what if it is a draw multiple or skip or reverse?
@@ -149,5 +149,8 @@ public class Game {
             card.isChecked = true;
             currentTurn = currentTurn + turnDirection;
         }
+    }
+    public Card draw() {
+        return deck.draw();
     }
 }

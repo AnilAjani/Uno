@@ -81,7 +81,7 @@ class PlayerTest {
         //Arrange
         game.getDeck().getDiscardPile().add(new Card(Color.Blue, Faces.Two));
         //Act
-        player.takeTurn(game.getDeck(), game);
+        player.takeTurn(game);
         var result = player.getHand().size();
 
         //Assert
@@ -92,7 +92,7 @@ class PlayerTest {
         //Arrange
 
         //Act
-        player.takeTurn(game.getDeck(), game);
+        player.takeTurn(game);
         var result = game.getDeck().getDiscardPile().size();
 
         //Assert
@@ -113,7 +113,7 @@ class PlayerTest {
                 new Card(Color.Green, Faces.One)
         ));
         //Act
-        player.takeTurn(game.getDeck(),game);
+        player.takeTurn(game);
         var result = game.getDeck().getDiscardPile().size();
 
         //Assert
@@ -131,7 +131,7 @@ class PlayerTest {
 
         ));
         //Act
-        player.takeTurn(game.getDeck(),game);
+        player.takeTurn(game);
         var result = player.getHand().size();
 
         //Assert

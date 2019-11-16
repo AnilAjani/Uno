@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Player {
+public class Player implements iPlayer {
     LinkedList<Card> hand;
     private String name;
     private Game game;
@@ -25,13 +25,13 @@ public class Player {
     public List<Card> getHand() {
         return hand;
     }
-
-    public void takeTurn(Deck deck, Game game) {
+    @Override
+    public void takeTurn(Game game) {
         for (var card : hand) {
             if (game.isPlayable(card)) {
                 hand.remove(card);
                 game.playCard(card);
-                System.out.println(deck.getDiscardPile().getLast() + " was played ");
+                System.out.println(game.getDeck().getDiscardPile().getLast() + " was played ");
                 return;
             }
         }
@@ -43,19 +43,14 @@ public class Player {
         return name;
     }
 
-    public void draw(Game game) {
-        this.game = game;
-        // TODO: replenish deck from discard pile.
-        if (game.getDeck().getDrawPile().isEmpty()) {
-            // getDiscardPile()-getDiscardTopCard();
-            var tempCard = game.getDeck().getDiscardPile().getLast();
-            game.getDeck().getDiscardPile().remove(tempCard);
-            game.getDeck().getDrawPile().addAll(game.getDeck().getDiscardPile());
-            game.getDeck().getDiscardPile().clear();
-            game.getDeck().getDiscardPile().add(tempCard);
-            Collections.shuffle(game.getDeck().getDrawPile());
+    @Override
+    public int handSize() {
+        return hand.size();
+    }
 
-        }
+    @Override
+    public Card draw(Game game) {
+        return game.draw();
     }
 }
 
