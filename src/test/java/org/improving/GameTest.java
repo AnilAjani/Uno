@@ -47,4 +47,26 @@ class GameTest {
         //Assert
         assertEquals(2, result);
     }
+    @Test
+    void playCard_Should_Add_Card_To_DisCardPile(){
+        //Arrange
+        game.getPlayers().get(0).getHand().add(new Card(Color.Green, Faces.Seven));
+        game.getDeck().getDiscardPile().clear();
+        game.getDeck().getDiscardPile().add(new Card(Color.Green, Faces.Seven));
+        //Act
+        game.playCard(new Card(Color.Red, Faces.Five));
+        var result = game.getDeck().getDiscardPile().size();
+        //Assert
+        assertEquals(2, result);
+    }
+    @Test
+    void playCard_Should_Set_Null_To_Color(){
+        //Arrange
+
+        //Act
+        game.playCard(new Card(null, Faces.Wild));
+        var result = game.getDeck().getDiscardPile().getLast().getColor().getClass();
+        //Assert
+        assertEquals(Color.class, result);
+    }
 }

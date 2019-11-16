@@ -31,7 +31,7 @@ public class Player implements iPlayer {
             if (game.isPlayable(card)) {
                 hand.remove(card);
                 game.playCard(card);
-                System.out.println(game.getDeck().getDiscardPile().getLast() + " was played ");
+                System.out.println(card + " was played ");
                 return;
             }
         }

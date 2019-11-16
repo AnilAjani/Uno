@@ -3,6 +3,7 @@ package org.improving;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class Game {
 
@@ -93,9 +94,7 @@ public class Game {
 
     public void playCard(Card card) {
         //System.out.println("Played card : " + card.toString());
-        if(card.getColor() == null){
-            card.setColor(Color.Red);
-        }
+        if(card.getColor() == null) card.setColor(Color.values()[new Random().nextInt(4)]);
         deck.getDiscardPile().add(card);
     }
 
