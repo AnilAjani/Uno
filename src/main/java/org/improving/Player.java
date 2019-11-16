@@ -17,7 +17,6 @@ public class Player {
     }
 
     public void dealHand(Deck deck) {
-        deck.getDrawPile();
         for (int i = 0; i < 7; i++) {
             hand.add(deck.draw());
         }

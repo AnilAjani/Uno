@@ -39,8 +39,8 @@ public class Game {
         for(var player:players){
             System.out.println(player.getName() + " has " + player.getHand().size());
         }
-        var topCard = deck.getDrawPile().remove(0);
-        deck.getDiscardPile().add(topCard);
+        var topCard = deck.draw();
+        playCard(topCard);
         System.out.println(topCard);
         int turns = 0;
         boolean gameProgress = true;
@@ -85,22 +85,18 @@ public class Game {
                 card.getFace().getValue() == 50;
     }
 
-    public void startTurns() {
-        var player = this.players.get(0);
-        player.takeTurn(deck, this);
-    }
-
     public Deck getDeck() {
         return deck;
     }
 
-    public List<Player> getPlayer() {
+    public List<Player> getPlayers() {
         return players;
+
     }
 
     public void playCard(Card card) {
         //System.out.println("Played card : " + card.toString());
-        if(deck.getDiscardTopCard().getFace().getValue() == 50){
+        if(card.getColor() == null){
             card.setColor(Color.Red);
         }
         deck.getDiscardPile().add(card);
@@ -120,7 +116,7 @@ public class Game {
     // next player will have to deal with the special card
     public void executeSpecial(Game game, Card card){
 
-        int nextPlayer = (currentTurn + turnDirection) % players.size();
+        int nextPlayer = Math.abs((currentTurn + turnDirection) % players.size());
         int activePlayerNumber = currentTurn % players.size();
 
         if(deck.getDiscardPile().getLast().getFace() == Faces.DrawTwo && card.isChecked) {

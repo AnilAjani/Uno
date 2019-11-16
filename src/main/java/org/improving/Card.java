@@ -20,7 +20,7 @@ public class Card {
     }
 
     public void setColor(Color color) {
-        color = color;
+        this.color = color;
     }
 
     public Faces getFace() {

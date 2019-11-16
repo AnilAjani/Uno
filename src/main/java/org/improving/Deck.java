@@ -16,7 +16,7 @@ public class Deck {
         for (var color : Color.values()){
             for (var faces : Faces.values()){
                 if (faces.getValue() == 50) {
-                    drawPile.add(new Card(color, faces));
+                    drawPile.add(new Card(null, faces));
                 } else {
                     drawPile.add(new Card(color, faces));
                     drawPile.add(new Card(color, faces));
@@ -26,7 +26,14 @@ public class Deck {
         Collections.shuffle(drawPile);
     }
     public Card draw(){
-        // TODO: replenish deck from discard pile.
+        replenishDeck();
+        var firstCard = drawPile.getLast();
+        drawPile.remove(firstCard);
+        return firstCard;
+        // determine if floating card is playable or keep in player hand
+    }
+
+    private void replenishDeck() {
         if(drawPile.isEmpty()){
             // getDiscardPile()-getDiscardTopCard();
             var tempCard = discardPile.getLast();
@@ -37,10 +44,6 @@ public class Deck {
             Collections.shuffle(drawPile);
 
         }
-        var firstCard = drawPile.getLast();
-        drawPile.remove(firstCard);
-        return firstCard;
-        // determine if floating card is playable or keep in player hand
     }
 
     public LinkedList<Card> getDrawPile() {
