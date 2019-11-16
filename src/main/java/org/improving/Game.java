@@ -3,7 +3,6 @@ package org.improving;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Game {
 
@@ -16,7 +15,7 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.startGame();
+        game.play();
 
     }
 
@@ -33,7 +32,7 @@ public class Game {
         ));
     }
 
-    public void startGame(){
+    public void play(){
         System.out.println("New Game with " + players.size() + " players ");
         System.out.println("DRAW PILE SIZE = " + deck.getDrawPile().size());
         for(var player:players){
@@ -60,9 +59,7 @@ public class Game {
 
             // what if it is a draw multiple or skip or reverse?
             // evaluate if true and executeSpecial
-            if(evaluateSpecialCard(deck.getDiscardPile().getLast())) {
                 executeSpecial(this, topCard);
-            }
             if (actualPlayer.getHand().size() == 0) {
                 System.out.println(actualPlayer.getName() + " Wins " + turns);
                 return;
@@ -104,14 +101,6 @@ public class Game {
 
     // evaluate if discard topcard is one of the following
     //if true proceed to executeSpecial
-    public boolean evaluateSpecialCard(Card card) {
-        if (deck.getDiscardPile().getLast().getFace().equals(Faces.DrawTwo)
-                || card.getFace().equals(Faces.WildDrawFour)
-                || card.getFace().equals(Faces.Skip)
-                || card.getFace().equals(Faces.Reverse)) {
-            return true;
-        } else return false;
-    }
 
     // next player will have to deal with the special card
     public void executeSpecial(Game game, Card card){
@@ -119,14 +108,13 @@ public class Game {
         int nextPlayer = Math.abs((currentTurn + turnDirection) % players.size());
         int activePlayerNumber = currentTurn % players.size();
 
-        if(deck.getDiscardPile().getLast().getFace() == Faces.DrawTwo && card.isChecked) {
+        if(deck.getDiscardPile().getLast().getFace() == Faces.DrawTwo) {
             System.out.println("---- " + players.get(nextPlayer).getName() + " DRAW TWO ----");
             players.get(nextPlayer).getHand().add(deck.draw());
             players.get(nextPlayer).getHand().add(deck.draw());
-            card.isChecked = true;
             currentTurn = currentTurn + turnDirection;
         }
-        if(deck.getDiscardPile().getLast().getFace() == Faces.WildDrawFour && card.isChecked) {
+        else if(deck.getDiscardPile().getLast().getFace() == Faces.WildDrawFour) {
             System.out.println("---- " + players.get(nextPlayer).getName() + " DRAW FOUR ----");
             players.get(nextPlayer).getHand().add(deck.draw());
             players.get(nextPlayer).getHand().add(deck.draw());
@@ -134,19 +122,16 @@ public class Game {
             players.get(nextPlayer).getHand().add(deck.draw());
 
 
-            card.isChecked = true;
             currentTurn = currentTurn + turnDirection;
         }
 
-        if(deck.getDiscardPile().getLast().getFace() == Faces.Reverse && card.isChecked) {
+        else if(deck.getDiscardPile().getLast().getFace() == Faces.Reverse) {
             System.out.println("----REVERSE----");
-            card.isChecked = true;
             turnDirection = turnDirection * -1;
         }
 
-        if(deck.getDiscardPile().getLast().getFace() == Faces.Skip && card.isChecked) {
+        else if(deck.getDiscardPile().getLast().getFace() == Faces.Skip) {
             System.out.println("----SKIP----" + players.get(nextPlayer).getName());
-            card.isChecked = true;
             currentTurn = currentTurn + turnDirection;
         }
     }

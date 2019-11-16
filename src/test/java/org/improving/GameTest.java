@@ -25,7 +25,7 @@ class GameTest {
         game.getPlayers().get(0).getHand().add(new Card(Color.Red, Faces.Two));
         game.getDeck().getDrawPile().add(new Card(Color.Red, Faces.Two));
         //Act
-        game.startGame();
+        game.play();
         var result = game.getDeck().getDiscardPile().size();
         //Assert
         assertEquals(2, result);
@@ -42,7 +42,7 @@ class GameTest {
             ));
         }
         //Act
-        game.startGame();
+        game.play();
         var result = game.getDeck().getDiscardPile().size();
         //Assert
         assertEquals(2, result);
