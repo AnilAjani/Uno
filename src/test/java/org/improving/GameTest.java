@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,6 +73,22 @@ class GameTest {
     @Test
     void play_Should_Not_executeSpecial_When_Player_Does_Not_Play(){
         //Arrange
+        var a = 5;
+        var b = 5;
+        var soe = a == b; // evaluate to true // compares vales of prims stored in stack
+
+        var bob = "Bob";
+        var bob2 = "Bob";
+        var sdf = bob == bob2; // evaluates to false
+        var sts = bob.equals(bob2); // evaluates to ture // compares values of reference types stored in heap probably via hashcodes
+
+        var bobHash = bob.hashCode();
+        var bobHash2 = bob2.hashCode(); // bianary representation of the value
+        var hashTest = bobHash == bobHash2; // evaluate to
+
+        // toString prints location of where the value is stored // override to print value in english
+
+
         for(var player:game.getPlayers()){
             player.getHand().clear();
             player.getHand().add(new Card(Color.Blue, Faces.Five));
@@ -92,6 +109,16 @@ class GameTest {
     @Test
     void play_Should_executeSpecial_For_First_Card_Dealt(){
 
+    }
+    @Test
+    public void Player_Should_Construct_With_7_Cards() {
+        //Arrange
+
+        //Act
+        var result = game.getPlayers().get(0).getHand().size();
+
+        //Assert
+        assertEquals(7, result);
     }
 
 }

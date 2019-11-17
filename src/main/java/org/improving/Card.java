@@ -25,8 +25,4 @@ public class Card {
     public Faces getFace() {
         return faces;
     }
-
-    public void setFace(Faces face) {
-        face = face;
-    }
 }
