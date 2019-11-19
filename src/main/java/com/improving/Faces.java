@@ -1,4 +1,4 @@
-package org.improving;
+package com.improving;
 
 public enum Faces {
     Zero(0),

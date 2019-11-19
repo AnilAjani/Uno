@@ -1,10 +1,10 @@
-package org.improving;
+package com.improving;
 
 public class Card {
-  private Color color;
+  private Colors color;
   private Faces faces;
 
-    public Card(Color color, Faces faces) {
+    public Card(Colors color, Faces faces) {
         this.color = color;
         this.faces = faces;
     }
@@ -14,11 +14,11 @@ public class Card {
         return "" + (color == null ?  "" : color.toString()) + " " + faces.toString();
     }
 
-    public Color getColor() {
+    public Colors getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(Colors color) {
         this.color = color;
     }
 

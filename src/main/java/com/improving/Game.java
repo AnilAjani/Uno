@@ -1,16 +1,15 @@
-package org.improving;
+package com.improving;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import javax.swing.text.html.Option;
+import java.util.*;
 
-public class Game {
+public class Game implements IGame {
 
     private Deck deck = new Deck();
     LinkedList<Player> players;
     int currentTurn = 0;
     int turnDirection = 1;
+    Optional<Colors> currentCardColor;
 
 
     public static void main(String[] args) {
@@ -35,8 +34,10 @@ public class Game {
         printGameStart();
 
         // Draw the first card.
-        playCard(draw());
+        playCard(draw(), Optional.of(Colors.Red));
         System.out.println(deck.getDiscardPile().getLast());
+
+
 
         int turns = 0;
         int playerNumber;
@@ -49,9 +50,7 @@ public class Game {
 
             // "current player" takes turn if cards in hand isPlayable based on color, face, wild or else draws card
             System.out.println(actualPlayer.getName() + " Has " + actualPlayer.getHand());
-            var playedCard = actualPlayer.takeTurn(this);
-            // what if it is a draw multiple or skip or reverse?
-            if (playedCard != null) executeSpecial();
+            actualPlayer.takeTurn(this);
             turns++;
 
             if (actualPlayer.handSize() == 0) {
@@ -78,11 +77,13 @@ public class Game {
         return Math.abs(currentTurn % players.size());
     }
 
-
     public boolean isPlayable(Card card) {
         return deck.getDiscardTopCard().getFace() == card.getFace() ||
                 deck.getDiscardTopCard().getColor() == card.getColor() ||
-                card.getFace().getValue() == 50;
+                card.getFace().getValue() == 50
+                || deck.getDiscardPile().getLast().getFace().getValue() == 50
+                && Optional.of(card.getColor()) == currentCardColor;
+
     }
 
     public Deck getDeck() {
@@ -92,10 +93,11 @@ public class Game {
     public List<Player> getPlayers() {
         return players;
     }
-
-    public void playCard(Card card) {
-        // If color is null, set the color.
-        if (card.getColor() == null) card.setColor(Color.values()[new Random().nextInt(4)]);
+    //@Override
+    public void playCard(Card card, Optional<Colors> chosenColor) {
+        if(chosenColor.isPresent()) {
+            currentCardColor = chosenColor;
+        } else currentCardColor = null;
         deck.getDiscardPile().add(card);
     }
 
@@ -131,4 +133,10 @@ public class Game {
     public Card draw() {
         return deck.draw();
     }
-}
+
+    @Override
+    public List<IPlayerInfo> getPlayerInfo() {
+        List<IPlayerInfo> playerInfo = new ArrayList<>(players);
+            return playerInfo;
+        }
+    }

@@ -1,12 +1,14 @@
-package org.improving;
+package com.improving;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
-public class Player implements iPlayer {
+public class Player implements IPlayer {
     LinkedList<Card> hand;
     private String name;
-    private Game game;
+    private List<Optional> chooseColor;
 
 
     public Player(String name, Deck deck) {
@@ -24,20 +26,30 @@ public class Player implements iPlayer {
     public List<Card> getHand() {
         return hand;
     }
+
     @Override
-    public Card takeTurn(Game game) {
+    public void takeTurn(IGame game) {
         for (var card : hand) {
             if (game.isPlayable(card)) {
                 hand.remove(card);
-                game.playCard(card);
+
+                game.playCard(card, Optional.of(Colors.Red));
                 System.out.println(card + " was played ");
-                return card;
+                return;
             }
         }
-        hand.add(game.getDeck().draw());
+        hand.add(draw(game));
         System.out.println("Drew card");
-        return null;
     }
+
+    public void playHighestValue(IGame igame) {
+        for (var cards : hand) {
+            if(cards.getFace().getValue() == 50){
+                takeTurn(igame);
+            }
+        }
+    }
+
 
     public String getName() {
         return name;
@@ -49,7 +61,7 @@ public class Player implements iPlayer {
     }
 
     @Override
-    public Card draw(Game game) {
+    public Card draw(IGame game) {
         return game.draw();
     }
 }

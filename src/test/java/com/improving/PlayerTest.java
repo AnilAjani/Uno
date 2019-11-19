@@ -1,5 +1,6 @@
-package org.improving;
+package com.improving;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ class PlayerTest {
         deck = new Deck();
         game = new Game();
         player = new Player("This", game.getDeck());
-        Card card = new Card(Color.Red, Faces.Five);
+        Card card = new Card(Colors.Red, Faces.Five);
         game.getDeck().getDiscardPile().add(card);
     }
 
@@ -25,61 +26,61 @@ class PlayerTest {
     void isPlayable_Should_Return_True_When_Faces_Match() {
         //Arrange
 
-        game.getDeck().getDiscardPile().add(new Card(Color.Blue, Faces.Two));
-        Card card = new Card(Color.Red, Faces.Two);
+        game.getDeck().getDiscardPile().add(new Card(Colors.Blue, Faces.Two));
+        Card card = new Card(Colors.Red, Faces.Two);
         //Act
         var result = game.isPlayable(card);
         //Assert
-        assertTrue(result);
+        Assertions.assertTrue(result);
     }
     @Test
     void isPlayable_Should_Return_True_When_Color_Match() {
         //Arrange
 
-        game.getDeck().getDiscardPile().add(new Card(Color.Blue, Faces.Two));
-        Card card = new Card(Color.Blue, Faces.Four);
+        game.getDeck().getDiscardPile().add(new Card(Colors.Blue, Faces.Two));
+        Card card = new Card(Colors.Blue, Faces.Four);
         //Act
         var result = game.isPlayable(card);
         //Assert
-        assertTrue(result);
+        Assertions.assertTrue(result);
     }
     @Test
     void isPlayable_Should_Return_True_When_Wild() {
         //Arrange
 
-        game.getDeck().getDiscardPile().add(new Card(Color.Blue, Faces.Two));
+        game.getDeck().getDiscardPile().add(new Card(Colors.Blue, Faces.Two));
         Card card = new Card(null, Faces.Wild);
         //Act
         var result = game.isPlayable(card);
         //Assert
-        assertTrue(result);
+        Assertions.assertTrue(result);
     }
     @Test
     void isPlayable_Should_Return_True_When_DrawFour() {
         //Arrange
 
-        game.getDeck().getDiscardPile().add(new Card(Color.Blue, Faces.Two));
+        game.getDeck().getDiscardPile().add(new Card(Colors.Blue, Faces.Two));
         Card card = new Card(null, Faces.WildDrawFour);
         //Act
         var result = game.isPlayable(card);
         //Assert
-        assertTrue(result);
+        Assertions.assertTrue(result);
     }
     @Test
     void isPlayable_Should_Return_False_When_False() {
         //Arrange
-        game.getDeck().getDiscardPile().add(new Card(Color.Blue, Faces.Two));
-        Card card = new Card(Color.Red, Faces.Six);
+        game.getDeck().getDiscardPile().add(new Card(Colors.Blue, Faces.Two));
+        Card card = new Card(Colors.Red, Faces.Six);
         //Act
         var result = game.isPlayable(card);
         //Assert
-        assertFalse(result);
+        Assertions.assertFalse(result);
     }
 
     @Test
     void takeTurn_Should_Remove_One_Card_From_Hand() {
         //Arrange
-        game.getDeck().getDiscardPile().add(new Card(Color.Blue, Faces.Two));
+        game.getDeck().getDiscardPile().add(new Card(Colors.Blue, Faces.Two));
         //Act
         player.takeTurn(game);
         var result = player.getHand().size();
@@ -104,13 +105,13 @@ class PlayerTest {
 
         player.getHand().clear();
         player.getHand().addAll(Arrays.asList(
-                new Card(Color.Red, Faces.Seven),
-                new Card(Color.Red, Faces.Five),
-                new Card(Color.Green, Faces.Six),
-                new Card(Color.Yellow, Faces.Zero),
-                new Card(Color.Blue, Faces.Two),
-                new Card(Color.Red, Faces.Three),
-                new Card(Color.Green, Faces.One)
+                new Card(Colors.Red, Faces.Seven),
+                new Card(Colors.Red, Faces.Five),
+                new Card(Colors.Green, Faces.Six),
+                new Card(Colors.Yellow, Faces.Zero),
+                new Card(Colors.Blue, Faces.Two),
+                new Card(Colors.Red, Faces.Three),
+                new Card(Colors.Green, Faces.One)
         ));
         //Act
         player.takeTurn(game);
@@ -123,11 +124,11 @@ class PlayerTest {
     @Test
     void takeTurn_Should_Draw_Card_If_Not_Playable() {
         //Arrange
-        game.getDeck().getDiscardPile().add(new Card(Color.Blue, Faces.Two));
+        game.getDeck().getDiscardPile().add(new Card(Colors.Blue, Faces.Two));
         player.getHand().clear();
         player.getHand().addAll(Arrays.asList(
-                new Card(Color.Red, Faces.Seven),
-                new Card(Color.Red, Faces.Five)
+                new Card(Colors.Red, Faces.Seven),
+                new Card(Colors.Red, Faces.Five)
 
         ));
         //Act
@@ -141,5 +142,22 @@ class PlayerTest {
     void takeTurn_Should_Let_DrawnCard_Play_If_isPlayable(){
 
     }
+    @Test
+    void player_Should_Play_Most_Common_Color_In_Hand(){
+        // Arrange
+
+        // Act
+
+        //Assert
+    }
+//    @Test
+//    void player_Should_Play_Highest_Value_Card_First(){
+//        // Arrange
+//        player.getHand().add(new Card(Colors.Blue, Faces.Wild));
+//        // Act
+//        player.takeTurn(game);
+//        deck.getDiscardPile().getLast();
+//        //Assert
+//    }
 
 }

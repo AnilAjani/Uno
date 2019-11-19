@@ -1,19 +1,15 @@
-package org.improving;
-
-import javafx.scene.control.ColorPicker;
+package com.improving;
 
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.LinkedList;
-import java.util.Random;
 
-public class Deck {
+public class Deck implements IDeck {
 
     private LinkedList<Card> drawPile = new LinkedList<>();
     private LinkedList<Card> discardPile = new LinkedList<>();
 
     public Deck(){
-        for (var color : Color.values()){
+        for (var color : Colors.values()){
             for (var faces : Faces.values()){
                 if (faces.getValue() == 50) {
                     drawPile.add(new Card(null, faces));
@@ -49,11 +45,17 @@ public class Deck {
     public LinkedList<Card> getDrawPile() {
         return drawPile;
     }
+    @Override
     public LinkedList<Card> getDiscardPile(){
         return discardPile;
     }
 
     public Card getDiscardTopCard(){
         return discardPile.getLast();
+    }
+
+    @Override
+    public int getDrawPileSize() {
+        return drawPile.size();
     }
 }
