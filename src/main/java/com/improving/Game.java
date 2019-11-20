@@ -81,8 +81,8 @@ public class Game implements IGame {
         return deck.getDiscardTopCard().getFace() == card.getFace() ||
                 deck.getDiscardTopCard().getColor() == card.getColor() ||
                 card.getFace().getValue() == 50
-                || deck.getDiscardPile().getLast().getFace().getValue() == 50
-                && Optional.of(card.getColor()) == currentCardColor;
+                || (deck.getDiscardPile().getLast().getFace().getValue() == 50
+                && card.getColor().hashCode() == currentCardColor.hashCode());
 
     }
 
@@ -105,6 +105,7 @@ public class Game implements IGame {
     //if true proceed to executeSpecial
 
     // next player will have to deal with the special card
+
     public void executeSpecial() {
 
         int nextPlayer = Math.abs((currentTurn + turnDirection) % players.size());
